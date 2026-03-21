@@ -1,0 +1,20 @@
+# build artifacts
+*.o
+*.elf
+*.uf2
+*.map
+*.a
+
+# generated
+gen/
+build/
+
+config.toml
+
+# pioasm binary — downloaded by build.py
+tools/pioasm
+
+# python
+__pycache__/
+*.pyc
+.venv/
