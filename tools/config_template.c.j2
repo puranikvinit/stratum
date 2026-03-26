@@ -1,0 +1,50 @@
+#include "config.h"
+
+const target_cfg stratum_cfg = {
+  .name = "{{ target.name }}",
+  .swds = {
+    {% for swd in target.swd %}
+    [{{ loop.index0 }}] = (swd_cfg){
+      .name = "{{ swd.name }}",
+      .sm_id = {{ swd.pio_id * 4 + swd.sm_id }},
+      .clk_pin = {{ swd.clk_pin }},
+      .io_pin = {{ swd.io_pin }},
+      .freq_hz = {{ swd.freq_hz }},
+    },
+    {% endfor %}
+  },
+  .num_swd = {{ target.swd | length }},
+  .sniffers = {
+    {% for sniffer in target.sniffer %}
+    [{{ loop.index0 }}] = (sniffer_cfg) {
+      .name = "{{ sniffer.name }}",
+      .type = {% if sniffer.type == 'spi' %}SNIFFER_TYPE_SPI{% elif sniffer.type == 'i2c' %}SNIFFER_TYPE_I2C{% elif sniffer.type == 'uart' %}SNIFFER_TYPE_UART{% else %}SNIFFER_TYPE_NONE{% endif %},
+      .sm_id = {{ sniffer.pio_id * 4 + sniffer.sm_id }},
+      .hw = {
+        {% if sniffer.type == 'spi' %}
+        .spi = (sniffer_spi_cfg) {
+          .clk_pin = {{ sniffer.clk_pin }},
+          .mosi_pin = {{ sniffer.mosi_pin }},
+          .miso_pin = {{ sniffer.miso_pin }},
+          .cs_pin = {{ sniffer.cs_pin }},
+          .txn_width = {{ sniffer.txn_width }},
+        },
+        {% elif sniffer.type == 'i2c' %}
+        .i2c = (sniffer_i2c_cfg) {
+          .scl_pin = {{ sniffer.scl_pin }},
+          .sda_pin = {{ sniffer.sda_pin }},
+          .addr_filter = {{ sniffer.addr_filter }},
+        },
+        {% elif sniffer.type == 'uart' %}
+        .uart = (sniffer_uart_cfg) {
+          .tx_pin = {{ sniffer.tx_pin }},
+          .rx_pin = {{ sniffer.rx_pin }},
+          .baud_rate = {{ sniffer.baud_rate }},
+        },
+        {% endif %}
+      },
+    },
+    {% endfor %}
+  },
+  .num_sniffer = {{ target.sniffer | length }},
+};

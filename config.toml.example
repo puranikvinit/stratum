@@ -1,0 +1,43 @@
+# stratum static configuration file
+# Copy the contents of this file to `config.toml` and fill in the appropriate values
+
+name = "sample phase-1 target"
+
+[[swd]]
+name = "cortex-m4"
+clk_pin = 2
+io_pin = 3
+freq_hz = 1_000_000
+
+[[swd]]
+name = "cortex-m0+"
+clk_pin = 4
+io_pin = 5
+freq_hz = 1_000_000
+
+[[sniffer]]
+name = "sensor"
+type = "spi"
+clk_pin = 10
+mosi_pin = 11
+miso_pin = 12
+cs_pin = 13
+txn_width = 8
+
+[[sniffer]]
+name = "display"
+type = "i2c"
+scl_pin = 14
+sda_pin = 15
+addr_filter = 0x0
+
+[[sniffer]]
+name = "logger"
+type = "uart"
+tx_pin = 17
+rx_pin = 18
+baud_rate = 115_200
+
+[debug]
+pio_self_test = false
+
