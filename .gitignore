@@ -19,3 +19,9 @@ tools/pioasm
 __pycache__/
 *.pyc
 .venv/
+
+# PicoSnoop artifacts
+.picosnoop_history
+*.bin
+*.dump
+*.log
